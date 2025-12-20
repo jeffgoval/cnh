@@ -158,7 +158,7 @@ export default function AulasInstructorPage() {
     >
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Minhas Aulas</h1>
+          <h1 className="text-2xl font-medium tracking-tight">Minhas Aulas</h1>
           <p className="text-muted-foreground">
             Gerencie seus agendamentos e confirme aulas com alunos
           </p>
@@ -176,7 +176,7 @@ export default function AulasInstructorPage() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">{stats.total}</div>
+              <div className="text-3xl font-medium">{stats.total}</div>
               <p className="text-xs text-muted-foreground mt-1">
                 Todas as aulas agendadas
               </p>
@@ -193,7 +193,7 @@ export default function AulasInstructorPage() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-yellow-600">{stats.pending}</div>
+              <div className="text-3xl font-medium text-yellow-600">{stats.pending}</div>
               <p className="text-xs text-muted-foreground mt-1">
                 Aguardando confirmação
               </p>
@@ -210,7 +210,7 @@ export default function AulasInstructorPage() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-blue-600">{stats.confirmed}</div>
+              <div className="text-3xl font-medium text-blue-600">{stats.confirmed}</div>
               <p className="text-xs text-muted-foreground mt-1">
                 Prontas para acontecer
               </p>
@@ -227,7 +227,7 @@ export default function AulasInstructorPage() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-green-600">{stats.completed}</div>
+              <div className="text-3xl font-medium text-green-600">{stats.completed}</div>
               <p className="text-xs text-muted-foreground mt-1">
                 Aulas finalizadas
               </p>
@@ -261,13 +261,13 @@ export default function AulasInstructorPage() {
                       <div className="flex gap-4">
                         <Avatar className="h-12 w-12">
                           <AvatarImage src={undefined} />
-                          <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                          <AvatarFallback className="bg-primary/10 text-primary font-medium">
                             <User className="h-6 w-6" />
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex-1 space-y-3">
                           <div className="flex flex-wrap items-center gap-2">
-                            <h3 className="text-lg font-semibold">
+                            <h3 className="text-base font-medium">
                               {appointment.student?.full_name || 'Aluno não identificado'}
                             </h3>
                             {getStatusBadge(appointment.status)}
@@ -300,7 +300,7 @@ export default function AulasInstructorPage() {
 
                             <div className="flex items-center gap-2 pt-1">
                               <DollarSign className="h-5 w-5 text-primary flex-shrink-0" />
-                              <span className="text-lg font-bold text-primary">
+                              <span className="text-lg font-medium text-primary">
                                 {formatCurrency(appointment.slot.price)}
                               </span>
                             </div>

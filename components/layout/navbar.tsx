@@ -10,6 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Heading, Text } from "@/components/ui/typography"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 
@@ -40,7 +41,7 @@ export function Navbar({ userName, userEmail, userRole }: NavbarProps) {
   return (
     <header className="sticky top-0 z-40 flex h-14 items-center justify-between border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-6">
       <div className="flex items-center gap-4">
-        <h1 className="text-lg font-semibold">Dashboard</h1>
+        <Heading level={3}>Dashboard</Heading>
       </div>
 
       <div className="flex items-center gap-4">
@@ -52,11 +53,11 @@ export function Navbar({ userName, userEmail, userRole }: NavbarProps) {
                 {initials}
               </AvatarFallback>
             </Avatar>
-            <div className="flex flex-col items-start text-sm">
-              <span className="font-medium">{userName || "Usuário"}</span>
-              <span className="text-xs text-muted-foreground hidden sm:block">
+            <div className="flex flex-col items-start">
+              <Text variant="small" className="font-medium">{userName || "Usuário"}</Text>
+              <Text variant="muted" className="text-[11px] hidden sm:block">
                 {userEmail}
-              </span>
+              </Text>
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">

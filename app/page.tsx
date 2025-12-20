@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Heading, Text } from '@/components/ui/typography'
 import { GraduationCap, Car, Calendar, Shield, Clock, MapPin, CheckCircle2, Sparkles } from 'lucide-react'
 
 export default function HomePage() {
@@ -41,30 +42,30 @@ export default function HomePage() {
               Conectando alunos e instrutores
             </Badge>
 
-            <h1 className="mb-6 text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
+            <Heading level={1} className="mb-6">
               <span className="bg-gradient-to-r from-primary via-blue-600 to-purple-600 bg-clip-text text-transparent">
                 AgendaCNH
               </span>
-            </h1>
+            </Heading>
 
-            <p className="mb-4 text-xl font-medium text-foreground/90 sm:text-2xl">
+            <Text variant="large" className="mb-4">
               Marketplace de Instrutores de Trânsito
-            </p>
+            </Text>
 
-            <p className="mx-auto mb-10 max-w-2xl text-lg text-muted-foreground">
+            <Text variant="muted" className="mx-auto mb-10 max-w-2xl">
               A plataforma que conecta você com instrutores de direção verificados e autônomos.
               Agende suas aulas com facilidade e segurança.
-            </p>
+            </Text>
 
             <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
               <Link href="/cadastro">
-                <Button size="lg" className="gap-2 px-8 text-base shadow-lg hover:shadow-xl transition-shadow">
+                <Button size="lg" className="gap-2 px-8 text-sm font-medium shadow-lg hover:shadow-xl transition-shadow">
                   <GraduationCap className="h-5 w-5" />
                   Começar Agora
                 </Button>
               </Link>
               <Link href="/login">
-                <Button size="lg" variant="outline" className="gap-2 px-8 text-base">
+                <Button size="lg" variant="outline" className="gap-2 px-8 text-sm font-medium">
                   Fazer Login
                 </Button>
               </Link>
@@ -81,7 +82,7 @@ export default function HomePage() {
       <section className="py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
+            <h2 className="text-2xl font-medium tracking-tight sm:text-3xl mb-4">
               Por que escolher o AgendaCNH?
             </h2>
             <p className="text-lg text-muted-foreground">
@@ -98,8 +99,8 @@ export default function HomePage() {
                     <div className="mb-4 w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
                       <Icon className="h-6 w-6 text-primary" />
                     </div>
-                    <CardTitle className="text-lg">{feature.title}</CardTitle>
-                    <CardDescription className="text-sm">{feature.description}</CardDescription>
+                    <CardTitle className="text-base font-medium">{feature.title}</CardTitle>
+                    <CardDescription className="text-sm text-muted-foreground">{feature.description}</CardDescription>
                   </CardHeader>
                 </Card>
               )
@@ -202,7 +203,7 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-grid-white/10 [mask-image:linear-gradient(0deg,rgba(255,255,255,0.1),rgba(255,255,255,0.5))]" />
         <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl mb-6">
+            <h2 className="text-2xl font-medium tracking-tight text-white sm:text-3xl mb-6">
               Pronto para começar?
             </h2>
             <p className="text-lg text-blue-100 mb-10">

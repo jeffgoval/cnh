@@ -89,29 +89,34 @@ export default function MinhasAulasPage() {
   const getStatusInfo = (status: string) => {
     const config = {
       pending: {
-        variant: 'warning' as const,
+        variant: 'outline' as const,
         label: 'Aguardando',
         icon: AlertCircle,
+        className: 'bg-yellow-100 text-yellow-800 border-yellow-200',
       },
       confirmed: {
-        variant: 'info' as const,
+        variant: 'outline' as const,
         label: 'Confirmada',
         icon: CheckCircle2,
+        className: 'bg-blue-100 text-blue-800 border-blue-200',
       },
       completed: {
-        variant: 'success' as const,
+        variant: 'outline' as const,
         label: 'Concluída',
         icon: CheckCircle2,
+        className: 'bg-green-100 text-green-800 border-green-200',
       },
       cancelled: {
         variant: 'destructive' as const,
         label: 'Cancelada',
         icon: XCircle,
+        className: '',
       },
     }[status] || {
       variant: 'secondary' as const,
       label: status,
       icon: Clock,
+      className: '',
     }
 
     return config
@@ -132,7 +137,7 @@ export default function MinhasAulasPage() {
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Minhas Aulas</h1>
+            <h1 className="text-2xl font-medium tracking-tight">Minhas Aulas</h1>
             <p className="text-muted-foreground mt-2">
               Acompanhe e gerencie seus agendamentos
             </p>
@@ -150,19 +155,19 @@ export default function MinhasAulasPage() {
           <Card className="border-l-4 border-l-primary">
             <CardHeader className="pb-3">
               <CardDescription>Total de Aulas</CardDescription>
-              <CardTitle className="text-3xl font-bold">{stats.total}</CardTitle>
+              <CardTitle className="text-2xl font-medium">{stats.total}</CardTitle>
             </CardHeader>
           </Card>
           <Card className="border-l-4 border-l-blue-500">
             <CardHeader className="pb-3">
               <CardDescription>Confirmadas</CardDescription>
-              <CardTitle className="text-3xl font-bold text-blue-600">{stats.confirmed}</CardTitle>
+              <CardTitle className="text-2xl font-medium text-blue-600">{stats.confirmed}</CardTitle>
             </CardHeader>
           </Card>
           <Card className="border-l-4 border-l-green-500">
             <CardHeader className="pb-3">
               <CardDescription>Concluídas</CardDescription>
-              <CardTitle className="text-3xl font-bold text-green-600">{stats.completed}</CardTitle>
+              <CardTitle className="text-2xl font-medium text-green-600">{stats.completed}</CardTitle>
             </CardHeader>
           </Card>
         </div>
@@ -205,16 +210,16 @@ export default function MinhasAulasPage() {
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex items-start gap-4 flex-1">
                           <Avatar className="h-12 w-12 border-2 border-primary/20">
-                            <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                            <AvatarFallback className="bg-primary/10 text-primary font-medium">
                               {instructorInitials}
                             </AvatarFallback>
                           </Avatar>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 flex-wrap mb-2">
-                              <h3 className="text-lg font-semibold">
+                              <h3 className="text-base font-medium">
                                 {appointment.instructor.full_name}
                               </h3>
-                              <Badge variant={statusInfo.variant} className="gap-1">
+                              <Badge variant={statusInfo.variant} className={`gap-1 ${statusInfo.className}`}>
                                 <StatusIcon className="h-3 w-3" />
                                 {statusInfo.label}
                               </Badge>
@@ -246,7 +251,7 @@ export default function MinhasAulasPage() {
                         </div>
 
                         <div className="text-right flex-shrink-0">
-                          <div className="text-2xl font-bold text-primary">
+                          <div className="text-xl font-medium text-primary">
                             {formatCurrency(appointment.slot.price)}
                           </div>
                         </div>

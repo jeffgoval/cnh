@@ -4,6 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Calendar, GraduationCap, Search, User, ClipboardList, Home, Settings, Shield } from "lucide-react"
+import { Text } from "@/components/ui/typography"
 
 interface SidebarProps {
   userRole: "ALUNO" | "INSTRUTOR" | "ADMIN"
@@ -75,8 +76,8 @@ export function Sidebar({ userRole }: SidebarProps) {
   return (
     <div className="flex h-full flex-col border-r bg-card">
       <div className="flex h-14 items-center border-b px-6">
-        <Link href="/" className="flex items-center gap-2 font-bold text-lg">
-          <GraduationCap className="h-6 w-6 text-primary" />
+        <Link href="/" className="flex items-center gap-2 text-[16px] font-medium">
+          <GraduationCap className="h-5 w-5 text-primary" />
           <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
             AgendaCNH
           </span>
@@ -93,7 +94,7 @@ export function Sidebar({ userRole }: SidebarProps) {
               key={link.href}
               href={link.href}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all hover:bg-accent hover:text-accent-foreground",
+                "flex items-center gap-3 rounded-lg px-3 py-2.5 text-[13px] font-medium transition-all hover:bg-accent hover:text-accent-foreground",
                 isActive
                   ? "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 hover:text-primary-foreground"
                   : "text-muted-foreground"
@@ -107,17 +108,17 @@ export function Sidebar({ userRole }: SidebarProps) {
       </nav>
 
       <div className="border-t p-4">
-        <div className="rounded-lg bg-primary/10 p-3 text-sm">
-          <p className="font-medium text-primary">
+        <div className="rounded-lg bg-primary/10 p-3">
+          <Text variant="small" className="font-medium text-primary">
             {userRole === "ALUNO" ? "Modo Aluno" : userRole === "INSTRUTOR" ? "Modo Instrutor" : "Modo Administrador"}
-          </p>
-          <p className="mt-1 text-xs text-muted-foreground">
+          </Text>
+          <Text variant="muted" className="mt-1 text-[11px]">
             {userRole === "ALUNO"
               ? "Encontre e agende suas aulas"
               : userRole === "INSTRUTOR"
                 ? "Gerencie seus horários e alunos"
                 : "Gestão do sistema e aprovações"}
-          </p>
+          </Text>
         </div>
       </div>
     </div>

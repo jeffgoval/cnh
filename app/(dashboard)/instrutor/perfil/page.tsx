@@ -180,7 +180,7 @@ export default function InstructorProfilePage() {
     >
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Configurar Perfil</h1>
+          <h1 className="text-2xl font-medium tracking-tight">Meu Perfil</h1>
           <p className="text-muted-foreground mt-2">
             Mantenha suas informações e documentos do veículo atualizados
           </p>
@@ -198,13 +198,13 @@ export default function InstructorProfilePage() {
                     onUploadSuccess={(url) => setProfile(prev => ({ ...prev, avatar_url: url }))}
                   />
                   <div className="text-center">
-                    <h3 className="font-semibold text-xl">{profile.full_name || 'Instrutor'}</h3>
+                    <h3 className="font-medium text-lg">{profile.full_name || 'Instrutor'}</h3>
                     <p className="text-sm text-muted-foreground">{currentUser.email}</p>
                   </div>
                   <div className="flex flex-wrap gap-2 justify-center">
                     <Badge variant="default" className="bg-blue-600">Instrutor</Badge>
                     {profile.document_verified ? (
-                      <Badge variant="success" className="bg-green-100 text-green-700">Verificado</Badge>
+                      <Badge variant="outline" className="bg-green-100 text-green-700 hover:bg-green-200 border-green-200">Verificado</Badge>
                     ) : (
                       <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50">Aguardando Verificação</Badge>
                     )}

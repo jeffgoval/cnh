@@ -13,7 +13,7 @@ import { Badge } from '@/components/ui/badge'
 import { DashboardLayout } from '@/components/layout/dashboard-layout'
 import { useUser } from '@/hooks/use-user'
 import { toast } from 'sonner'
-import { Calendar, MapPin, Clock, Phone, Star } from 'lucide-react'
+import { Calendar, MapPin, Clock, Phone, Star, CheckCircle2 } from 'lucide-react'
 import { formatPhone } from '@/lib/utils/masks'
 import { formatCurrency } from '@/lib/utils/money'
 
@@ -95,7 +95,7 @@ export default function BuscarPage() {
       } else {
         toast.success('Aula agendada com sucesso!')
         setNotes('')
-        loadSlots(selectedInstructor.id) // Recarregar slots
+        loadSlots(selectedInstructor.id)
       }
     } catch (error: any) {
       toast.error('Erro ao agendar aula')
@@ -105,11 +105,22 @@ export default function BuscarPage() {
   }
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString('pt-BR')
+    const date = new Date(dateString)
+    return date.toLocaleString('pt-BR', {
+      weekday: 'short',
+      day: '2-digit',
+      month: 'short',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
   }
 
   if (userLoading) {
-    return <div className="flex h-screen items-center justify-center">Carregando...</div>
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="text-muted-foreground">Carregando...</div>
+      </div>
+    )
   }
 
   if (!user) {
@@ -122,28 +133,29 @@ export default function BuscarPage() {
       userName={user.full_name || undefined}
       userEmail={user.email}
     >
-      <div className="space-y-6">
+      <div className="space-y-8">
+        {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Buscar Instrutores</h1>
+          <h1 className="text-2xl font-medium tracking-tight">Buscar Instrutores</h1>
           <p className="text-muted-foreground mt-2">
-            Encontre instrutores verificados e agende sua aula de direção
+            Encontre instrutores verificados e agende sua próxima aula
           </p>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Lista de Instrutores */}
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold">Instrutores Disponíveis</h2>
-              <Badge variant="secondary">{instructors.length} verificados</Badge>
+            <div className="flex items-center justify-between mb-1">
+              <h2 className="text-lg font-medium">Instrutores Disponíveis</h2>
+              <Badge variant="secondary" className="font-normal">
+                {instructors.length} {instructors.length === 1 ? 'instrutor' : 'instrutores'}
+              </Badge>
             </div>
 
             {instructors.length === 0 ? (
-              <Card className="border-dashed">
+              <Card>
                 <CardContent className="py-12 text-center">
-                  <div className="mx-auto w-12 h-12 rounded-full bg-muted flex items-center justify-center mb-4">
-                    <Star className="h-6 w-6 text-muted-foreground" />
-                  </div>
+                  <Star className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
                   <p className="text-muted-foreground">
                     Nenhum instrutor disponível no momento
                   </p>
@@ -163,25 +175,31 @@ export default function BuscarPage() {
                   return (
                     <Card
                       key={instructor.id}
-                      className={`cursor-pointer transition-all hover:shadow-md ${isSelected ? 'ring-2 ring-primary shadow-lg' : 'hover:border-primary/50'
+                      className={`cursor-pointer transition-all ${isSelected
+                        ? 'border-primary shadow-sm'
+                        : 'hover:border-muted-foreground/30'
                         }`}
                       onClick={() => handleSelectInstructor(instructor)}
                     >
-                      <CardHeader className="pb-4">
-                        <div className="flex items-start gap-4">
-                          <Avatar className="h-12 w-12 border-2 border-primary/20">
-                            <AvatarImage src={instructor.avatar_url || ''} alt={instructor.full_name} />
-                            <AvatarFallback className="bg-primary/10 text-primary font-semibold">
-                              {initials}
-                            </AvatarFallback>
-                          </Avatar>
+                      <CardHeader className="pb-3">
+                        <div className="flex items-start gap-3">
+                          <div className="relative">
+                            <Avatar className="h-14 w-14">
+                              <AvatarImage src={instructor.avatar_url || ''} alt={instructor.full_name} />
+                              <AvatarFallback className="bg-muted text-foreground font-medium">
+                                {initials}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="absolute -bottom-0.5 -right-0.5 bg-green-500 rounded-full p-0.5 border-2 border-background">
+                              <CheckCircle2 className="h-3 w-3 text-white" />
+                            </div>
+                          </div>
                           <div className="flex-1 min-w-0">
-                            <CardTitle className="text-lg flex items-center gap-2">
+                            <CardTitle className="text-base font-medium">
                               {instructor.full_name}
-                              <Badge variant="success" className="text-xs">Verificado</Badge>
                             </CardTitle>
                             {instructor.bio && (
-                              <CardDescription className="mt-1 line-clamp-2">
+                              <CardDescription className="mt-1 text-sm line-clamp-2">
                                 {instructor.bio}
                               </CardDescription>
                             )}
@@ -191,8 +209,8 @@ export default function BuscarPage() {
                       {instructor.phone && (
                         <CardContent className="pt-0">
                           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <Phone className="h-4 w-4" />
-                            {formatPhone(instructor.phone)}
+                            <Phone className="h-3.5 w-3.5" />
+                            <span>{formatPhone(instructor.phone)}</span>
                           </div>
                         </CardContent>
                       )}
@@ -205,21 +223,23 @@ export default function BuscarPage() {
 
           {/* Horários Disponíveis */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-primary" />
-              <h2 className="text-xl font-semibold">
-                {selectedInstructor ? `Horários de ${selectedInstructor.full_name.split(' ')[0]}` : 'Selecione um instrutor'}
+            <div className="mb-1">
+              <h2 className="text-lg font-medium">
+                {selectedInstructor ? `Horários - ${selectedInstructor.full_name.split(' ')[0]}` : 'Horários Disponíveis'}
               </h2>
+              {selectedInstructor && (
+                <p className="text-sm text-muted-foreground mt-1">
+                  Selecione um horário para agendar sua aula
+                </p>
+              )}
             </div>
 
             {selectedInstructor ? (
               <>
                 {slots.length === 0 ? (
-                  <Card className="border-dashed">
+                  <Card>
                     <CardContent className="py-12 text-center">
-                      <div className="mx-auto w-12 h-12 rounded-full bg-muted flex items-center justify-center mb-4">
-                        <Clock className="h-6 w-6 text-muted-foreground" />
-                      </div>
+                      <Clock className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
                       <p className="text-muted-foreground">
                         Nenhum horário disponível no momento
                       </p>
@@ -227,39 +247,38 @@ export default function BuscarPage() {
                   </Card>
                 ) : (
                   <>
-                    <Card className="bg-muted/50">
-                      <CardContent className="pt-6">
+                    {/* Campo de Observações */}
+                    <Card className="bg-muted/30">
+                      <CardContent className="pt-5 pb-5">
                         <Label htmlFor="notes" className="text-sm font-medium">
                           Observações (opcional)
                         </Label>
                         <Input
                           id="notes"
                           className="mt-2"
-                          placeholder="Ex: Preciso praticar baliza e estacionamento"
+                          placeholder="Ex: Preciso praticar baliza"
                           value={notes}
                           onChange={(e) => setNotes(e.target.value)}
                         />
-                        <p className="text-xs text-muted-foreground mt-2">
-                          Adicione informações relevantes para seu instrutor
-                        </p>
                       </CardContent>
                     </Card>
 
+                    {/* Lista de Slots */}
                     <div className="space-y-3">
                       {slots.map((slot) => (
-                        <Card key={slot.id} className="hover:shadow-md transition-shadow">
-                          <CardContent className="pt-6">
+                        <Card key={slot.id} className="hover:border-muted-foreground/30 transition-colors">
+                          <CardContent className="pt-5 pb-5">
                             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
                               <div className="space-y-3 flex-1">
-                                <div className="flex items-center gap-2">
-                                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                                    <Calendar className="h-5 w-5 text-primary" />
+                                <div className="flex items-start gap-3">
+                                  <div className="w-10 h-10 rounded-md bg-muted flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <Calendar className="h-5 w-5 text-muted-foreground" />
                                   </div>
                                   <div>
-                                    <div className="font-semibold">
+                                    <div className="font-medium">
                                       {formatDate(slot.start_time)}
                                     </div>
-                                    <div className="text-xs text-muted-foreground">
+                                    <div className="text-sm text-muted-foreground mt-0.5">
                                       Duração: 1 hora
                                     </div>
                                   </div>
@@ -268,17 +287,17 @@ export default function BuscarPage() {
                                   <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0" />
                                   <span className="line-clamp-2">{slot.location_address}</span>
                                 </div>
-                                <div className="text-2xl font-bold text-primary">
+                                <div className="text-xl font-medium">
                                   {formatCurrency(slot.price)}
                                 </div>
                               </div>
                               <Button
                                 onClick={() => handleBookSlot(slot)}
                                 disabled={loading}
-                                size="lg"
+                                size="default"
                                 className="w-full sm:w-auto"
                               >
-                                {loading ? 'Agendando...' : 'Agendar Aula'}
+                                {loading ? 'Agendando...' : 'Agendar'}
                               </Button>
                             </div>
                           </CardContent>
@@ -289,16 +308,14 @@ export default function BuscarPage() {
                 )}
               </>
             ) : (
-              <Card className="border-dashed">
+              <Card>
                 <CardContent className="py-16 text-center">
-                  <div className="mx-auto w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                    <Calendar className="h-8 w-8 text-primary" />
-                  </div>
-                  <p className="text-muted-foreground text-lg mb-2">
+                  <Calendar className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+                  <p className="text-muted-foreground mb-1">
                     Selecione um instrutor
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    Escolha um instrutor ao lado para ver os horários disponíveis
+                    Escolha um instrutor ao lado para ver os horários
                   </p>
                 </CardContent>
               </Card>
@@ -306,7 +323,6 @@ export default function BuscarPage() {
           </div>
         </div>
       </div>
-    </DashboardLayout >
+    </DashboardLayout>
   )
 }
-

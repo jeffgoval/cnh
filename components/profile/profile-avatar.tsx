@@ -46,7 +46,7 @@ export function ProfileAvatar({ url, name, onUploadSuccess }: ProfileAvatarProps
         <div className="relative group">
             <Avatar className="h-40 w-40 border-4 border-muted transition-all group-hover:border-primary/50">
                 <AvatarImage src={url} className="object-cover" />
-                <AvatarFallback className="text-5xl bg-primary/10 text-primary font-bold">
+                <AvatarFallback className="text-5xl bg-primary/10 text-primary font-medium">
                     {initials}
                 </AvatarFallback>
             </Avatar>

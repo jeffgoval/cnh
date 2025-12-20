@@ -72,7 +72,7 @@ export default function AdminInstructorsPage() {
     if (!currentUser || currentUser.role !== 'ADMIN') {
         return (
             <div className="flex h-screen flex-col items-center justify-center gap-4">
-                <h1 className="text-2xl font-bold text-destructive">Acesso Negado</h1>
+                <h1 className="text-2xl font-medium text-destructive">Acesso Negado</h1>
                 <p className="text-muted-foreground">Você não tem permissão para acessar esta página.</p>
                 <Button onClick={() => window.location.href = '/'}>Voltar ao Início</Button>
             </div>
@@ -87,7 +87,7 @@ export default function AdminInstructorsPage() {
         >
             <div className="space-y-6">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight">Gestão de Instrutores</h1>
+                    <h1 className="text-3xl font-medium tracking-tight">Gestão de Instrutores</h1>
                     <p className="text-muted-foreground">
                         Revise e aprove os documentos dos instrutores pendentes no sistema
                     </p>
@@ -99,7 +99,7 @@ export default function AdminInstructorsPage() {
                             <div className="rounded-full bg-muted p-6 mb-4">
                                 <CheckCircle2 className="h-10 w-10 text-muted-foreground" />
                             </div>
-                            <h3 className="text-lg font-semibold mb-2">Nenhum instrutor pendente</h3>
+                            <h3 className="text-lg font-medium mb-2">Nenhum instrutor pendente</h3>
                             <p className="text-muted-foreground max-w-sm">
                                 Todos os instrutores cadastrados já foram revisados ou ainda não enviaram documentos.
                             </p>
@@ -117,7 +117,7 @@ export default function AdminInstructorsPage() {
                                                 <User className="h-6 w-6 text-primary" />
                                             </div>
                                             <div>
-                                                <h3 className="text-lg font-bold">{instructor.full_name}</h3>
+                                                <h3 className="text-lg font-medium">{instructor.full_name}</h3>
                                                 <p className="text-sm text-muted-foreground">{instructor.email}</p>
                                             </div>
                                         </div>
@@ -155,7 +155,7 @@ export default function AdminInstructorsPage() {
                                         <div className="grid gap-8 lg:grid-cols-3">
                                             {/* Personal Info */}
                                             <section className="space-y-4">
-                                                <h4 className="font-semibold text-sm uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+                                                <h4 className="font-medium text-sm uppercase tracking-wider text-muted-foreground flex items-center gap-2">
                                                     <User className="h-4 w-4" /> Informações
                                                 </h4>
                                                 <div className="space-y-2 text-sm">
@@ -180,7 +180,7 @@ export default function AdminInstructorsPage() {
 
                                             {/* Vehicle Info */}
                                             <section className="space-y-4">
-                                                <h4 className="font-semibold text-sm uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+                                                <h4 className="font-medium text-sm uppercase tracking-wider text-muted-foreground flex items-center gap-2">
                                                     <Car className="h-4 w-4" /> Veículo
                                                 </h4>
                                                 <div className="rounded-lg bg-muted/50 p-4 space-y-2 text-sm border">
@@ -197,7 +197,7 @@ export default function AdminInstructorsPage() {
 
                                             {/* Documents */}
                                             <section className="space-y-4">
-                                                <h4 className="font-semibold text-sm uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+                                                <h4 className="font-medium text-sm uppercase tracking-wider text-muted-foreground flex items-center gap-2">
                                                     <FileText className="h-4 w-4" /> Documentos
                                                 </h4>
                                                 <div className="grid grid-cols-2 gap-4">

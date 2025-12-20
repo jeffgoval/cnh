@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Heading, Text } from '@/components/ui/typography'
 import { toast } from 'sonner'
 import type { UserRole } from '@/lib/supabase/types'
 
@@ -74,10 +75,10 @@ export default function CadastroPage() {
       <div className="flex min-h-screen items-center justify-center p-4">
         <Card className="w-full max-w-2xl">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold">Cadastro</CardTitle>
-            <CardDescription>
+            <Heading level={2}>Cadastro</Heading>
+            <Text variant="muted">
               Escolha como você deseja se cadastrar
-            </CardDescription>
+            </Text>
           </CardHeader>
           <CardContent className="grid gap-4 sm:grid-cols-2">
             <Button
@@ -86,7 +87,7 @@ export default function CadastroPage() {
               onClick={() => setRole('ALUNO')}
             >
               <div className="text-4xl">🎓</div>
-              <div className="font-semibold">Sou Aluno</div>
+              <div className="font-medium">Sou Aluno</div>
               <div className="text-xs text-muted-foreground">
                 Quero encontrar instrutores
               </div>
@@ -97,19 +98,19 @@ export default function CadastroPage() {
               onClick={() => setRole('INSTRUTOR')}
             >
               <div className="text-4xl">🚗</div>
-              <div className="font-semibold">Sou Instrutor</div>
+              <div className="font-medium">Sou Instrutor</div>
               <div className="text-xs text-muted-foreground">
                 Quero oferecer aulas
               </div>
             </Button>
           </CardContent>
           <CardFooter className="flex justify-center">
-            <div className="text-center text-sm text-muted-foreground">
+            <Text variant="muted" className="text-center">
               Já tem uma conta?{' '}
               <Link href="/login" className="text-primary hover:underline">
                 Faça login
               </Link>
-            </div>
+            </Text>
           </CardFooter>
         </Card>
       </div>
@@ -120,12 +121,12 @@ export default function CadastroPage() {
     <div className="flex min-h-screen items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">
+          <Heading level={2}>
             Cadastro - {role === 'ALUNO' ? 'Aluno' : 'Instrutor'}
-          </CardTitle>
-          <CardDescription>
+          </Heading>
+          <Text variant="muted">
             Preencha seus dados para criar sua conta
-          </CardDescription>
+          </Text>
         </CardHeader>
         <form onSubmit={handleSignUp}>
           <CardContent className="space-y-4">
@@ -161,9 +162,9 @@ export default function CadastroPage() {
                 required
                 minLength={6}
               />
-              <p className="text-xs text-muted-foreground">
+              <Text variant="muted" as="span" className="text-[11px]">
                 Mínimo 6 caracteres
-              </p>
+              </Text>
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">

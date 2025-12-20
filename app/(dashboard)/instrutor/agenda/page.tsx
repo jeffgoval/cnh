@@ -151,7 +151,7 @@ export default function AgendaPage() {
       <div className="space-y-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Minha Agenda</h1>
+            <h1 className="text-2xl font-medium tracking-tight">Minha Agenda</h1>
             <p className="text-muted-foreground">
               Gerencie seus horários disponíveis para aulas
             </p>
@@ -278,7 +278,7 @@ export default function AgendaPage() {
                 <div className="rounded-full bg-muted p-6 mb-4">
                   <Calendar className="h-10 w-10 text-muted-foreground" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Nenhum horário cadastrado</h3>
+                <h3 className="text-lg font-medium mb-2">Nenhum horário cadastrado</h3>
                 <p className="text-muted-foreground mb-4 max-w-sm">
                   Clique em &quot;Novo Horário&quot; para adicionar sua disponibilidade e começar a receber agendamentos.
                 </p>
@@ -310,7 +310,7 @@ export default function AgendaPage() {
                       <div className="flex items-start gap-2">
                         <Calendar className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
                         <div>
-                          <div className="font-semibold">
+                          <div className="font-medium">
                             {formatDate(slot.start_time)}
                           </div>
                           <div className="text-sm text-muted-foreground">
@@ -326,7 +326,7 @@ export default function AgendaPage() {
 
                       <div className="flex items-center gap-2">
                         <DollarSign className="h-5 w-5 text-primary flex-shrink-0" />
-                        <span className="text-lg font-bold text-primary">
+                        <span className="text-lg font-medium text-primary">
                           {formatCurrency(slot.price)}
                         </span>
                       </div>

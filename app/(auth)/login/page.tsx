@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Heading, Text } from '@/components/ui/typography'
 import { toast } from 'sonner'
 
 export default function LoginPage() {
@@ -57,10 +58,10 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Login</CardTitle>
-          <CardDescription>
+          <Heading level={2}>Login</Heading>
+          <Text variant="muted">
             Entre com seu email e senha para acessar sua conta
-          </CardDescription>
+          </Text>
         </CardHeader>
         <form onSubmit={handleLogin}>
           <CardContent className="space-y-4">
@@ -91,12 +92,12 @@ export default function LoginPage() {
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? 'Entrando...' : 'Entrar'}
             </Button>
-            <div className="text-center text-sm text-muted-foreground">
+            <Text variant="muted" className="text-center">
               Não tem uma conta?{' '}
               <Link href="/cadastro" className="text-primary hover:underline">
                 Cadastre-se
               </Link>
-            </div>
+            </Text>
           </CardFooter>
         </form>
       </Card>

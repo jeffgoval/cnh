@@ -114,7 +114,7 @@ export default function StudentProfilePage() {
         >
             <div className="space-y-6">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight">Meu Perfil</h1>
+                    <h1 className="text-2xl font-medium tracking-tight">Meu Perfil</h1>
                     <p className="text-muted-foreground mt-2">
                         Gerencie suas informações pessoais e foto de perfil
                     </p>
@@ -132,7 +132,7 @@ export default function StudentProfilePage() {
                                         onUploadSuccess={(url) => setFormData(prev => ({ ...prev, avatar_url: url }))}
                                     />
                                     <div className="text-center">
-                                        <h3 className="font-semibold text-lg">{formData.full_name || 'Usuário'}</h3>
+                                        <h3 className="font-medium text-lg">{formData.full_name || 'Usuário'}</h3>
                                         <p className="text-sm text-muted-foreground">{user.email}</p>
                                     </div>
                                     <Badge variant="secondary" className="px-3">Aluno</Badge>
