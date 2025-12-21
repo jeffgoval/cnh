@@ -256,39 +256,53 @@ export async function getInstructorStats() {
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
     const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59)
 
-    // Aulas de hoje
-    const { data: todayAppointments } = await supabase
+    // Aulas de hoje - buscar todas e filtrar por data do slot
+    const { data: allToday } = await supabase
       .from('appointments')
       .select('id, slot:slots(start_time)')
       .eq('instructor_id', user.id)
-      .gte('slot.start_time', today.toISOString())
-      .lt('slot.start_time', tomorrow.toISOString())
       .neq('status', 'cancelled')
 
-    // Aulas da semana
-    const { data: weekAppointments } = await supabase
+    const todayAppointments = allToday?.filter((apt: any) => {
+      if (!apt.slot?.start_time) return false
+      const slotDate = new Date(apt.slot.start_time)
+      return slotDate >= today && slotDate < tomorrow
+    }) || []
+
+    // Aulas da semana - buscar todas e filtrar por data do slot
+    const { data: allWeek } = await supabase
       .from('appointments')
       .select('id, slot:slots(start_time)')
       .eq('instructor_id', user.id)
-      .gte('slot.start_time', startOfWeek.toISOString())
-      .lt('slot.start_time', endOfWeek.toISOString())
       .neq('status', 'cancelled')
+
+    const weekAppointments = allWeek?.filter((apt: any) => {
+      if (!apt.slot?.start_time) return false
+      const slotDate = new Date(apt.slot.start_time)
+      return slotDate >= startOfWeek && slotDate < endOfWeek
+    }) || []
 
     // Ganhos do mês (aulas completadas)
-    const { data: monthEarnings } = await supabase
+    // Buscar todos os appointments completados e filtrar por data do slot
+    const { data: allCompleted } = await supabase
       .from('appointments')
-      .select('slot:slots(price)')
+      .select('slot:slots(price, start_time)')
       .eq('instructor_id', user.id)
       .eq('status', 'completed')
-      .gte('slot.start_time', startOfMonth.toISOString())
-      .lte('slot.start_time', endOfMonth.toISOString())
 
-    const totalEarnings = monthEarnings?.reduce((sum, apt: any) => sum + (apt.slot?.price || 0), 0) || 0
+    // Filtrar no código por data do slot dentro do mês
+    const monthEarnings = allCompleted?.filter((apt: any) => {
+      if (!apt.slot?.start_time) return false
+      const slotDate = new Date(apt.slot.start_time)
+      return slotDate >= startOfMonth && slotDate <= endOfMonth
+    }) || []
+
+    const totalEarnings = monthEarnings.reduce((sum: number, apt: any) => sum + (apt.slot?.price || 0), 0)
 
     return {
       stats: {
-        today: todayAppointments?.length || 0,
-        week: weekAppointments?.length || 0,
+        today: todayAppointments.length,
+        week: weekAppointments.length,
         monthEarnings: totalEarnings
       }
     }

@@ -178,7 +178,7 @@ export default function InstructorProfilePage() {
       userName={profile.full_name || undefined}
       userEmail={currentUser.email}
     >
-      <div className="space-y-6">
+      <div className="space-y-6 max-w-2xl mx-auto">
         <div>
           <h1 className="text-2xl font-medium tracking-tight">Meu Perfil</h1>
           <p className="text-muted-foreground mt-2">

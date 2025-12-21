@@ -304,8 +304,8 @@ export default function MeuDiaPage() {
         </div>
 
         {/* 📌 VISÃO GERAL */}
-        <div className="flex gap-3 overflow-x-auto pb-2 -mx-6 px-6 scrollbar-hide">
-          <Card className="flex-shrink-0 min-w-[140px] border-l-4 border-l-primary">
+        <div className="grid grid-cols-3 gap-3">
+          <Card className="border-l-4 border-l-primary">
             <CardContent className="p-4">
               <Text variant="small" className="text-muted-foreground">Hoje</Text>
               <Heading level={2} className="mt-1">{stats.today}</Heading>
@@ -313,7 +313,7 @@ export default function MeuDiaPage() {
             </CardContent>
           </Card>
 
-          <Card className="flex-shrink-0 min-w-[140px] border-l-4 border-l-blue-500">
+          <Card className="border-l-4 border-l-blue-500">
             <CardContent className="p-4">
               <Text variant="small" className="text-muted-foreground">Semana</Text>
               <Heading level={2} className="mt-1">{stats.week}</Heading>
@@ -321,7 +321,7 @@ export default function MeuDiaPage() {
             </CardContent>
           </Card>
 
-          <Card className="flex-shrink-0 min-w-[140px] border-l-4 border-l-green-500">
+          <Card className="border-l-4 border-l-green-500">
             <CardContent className="p-4">
               <Text variant="small" className="text-muted-foreground">Mês</Text>
               <Heading level={2} className="mt-1 text-green-600">{formatCurrency(stats.monthEarnings)}</Heading>

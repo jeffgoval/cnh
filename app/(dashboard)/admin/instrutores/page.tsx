@@ -85,7 +85,7 @@ export default function AdminInstructorsPage() {
             userName={currentUser.full_name || 'Admin'}
             userEmail={currentUser.email}
         >
-            <div className="space-y-6">
+            <div className="space-y-6 max-w-2xl mx-auto">
                 <div>
                     <h1 className="text-3xl font-medium tracking-tight">Gestão de Instrutores</h1>
                     <p className="text-muted-foreground">

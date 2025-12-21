@@ -116,21 +116,21 @@ export default function BuscarPage() {
       userName={user.full_name || undefined}
       userEmail={user.email}
     >
-      {/* Compact Header */}
-      <div className="mb-4">
-        <Heading level={1}>Instrutores</Heading>
-      </div>
+      <div className="max-w-2xl mx-auto space-y-6">
+        {/* Compact Header */}
+        <div>
+          <Heading level={1}>Instrutores</Heading>
+        </div>
 
-      {/* Context Bar (sticky) */}
-      <SearchContextBar
-        selectedCategories={selectedCategories}
-        onLocationClick={handleLocationClick}
-        onCategoryToggle={handleCategoryToggle}
-        className="-mx-6 px-6"
-      />
+        {/* Context Bar */}
+        <SearchContextBar
+          selectedCategories={selectedCategories}
+          onLocationClick={handleLocationClick}
+          onCategoryToggle={handleCategoryToggle}
+        />
 
-      {/* Instructor List */}
-      <div className="max-w-2xl mx-auto space-y-3 mt-6">
+        {/* Instructor List */}
+        <div className="space-y-3">
         {filteredInstructors.length === 0 ? (
           <Card className="border-dashed">
             <CardContent className="py-12 text-center space-y-4">
@@ -169,16 +169,17 @@ export default function BuscarPage() {
             />
           ))
         )}
-      </div>
-
-      {/* First-time user hint */}
-      {filteredInstructors.length > 0 && (
-        <div className="max-w-2xl mx-auto mt-8">
-          <Text variant="muted" className="text-center">
-            Aqui você encontra instrutores próximos para aulas práticas
-          </Text>
         </div>
-      )}
+
+        {/* First-time user hint */}
+        {filteredInstructors.length > 0 && (
+          <div>
+            <Text variant="muted" className="text-center">
+              Aqui você encontra instrutores próximos para aulas práticas
+            </Text>
+          </div>
+        )}
+      </div>
     </DashboardLayout>
   )
 }

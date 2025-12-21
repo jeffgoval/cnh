@@ -156,7 +156,7 @@ export default function AulasInstructorPage() {
       userName={user?.full_name || undefined}
       userEmail={user?.email}
     >
-      <div className="space-y-6">
+      <div className="space-y-6 max-w-2xl mx-auto">
         <div>
           <h1 className="text-2xl font-medium tracking-tight">Minhas Aulas</h1>
           <p className="text-muted-foreground">
