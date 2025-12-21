@@ -68,3 +68,5 @@ documents/
 - Imagens: JPG, PNG, WEBP
 - Tamanho máximo: 5MB por arquivo
 
+
+

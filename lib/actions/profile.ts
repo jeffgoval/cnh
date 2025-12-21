@@ -96,6 +96,44 @@ export async function updateInstructorData(profileData: any, assetData: any) {
     }
 }
 
+export async function getInstructorPublicProfile(instructorId: string) {
+    const supabase = await createClient()
+
+    try {
+        // Get instructor profile data
+        const { data: profile, error: profileError } = await supabase
+            .from('profiles')
+            .select('id, full_name, bio, phone, avatar_url, document_verified, created_at')
+            .eq('id', instructorId)
+            .eq('role', 'INSTRUTOR')
+            .maybeSingle()
+
+        if (profileError) throw profileError
+        if (!profile) {
+            return { error: 'Instrutor não encontrado' }
+        }
+
+        // Get instructor assets (vehicle and documents info)
+        const { data: assets, error: assetsError } = await supabase
+            .from('instructor_assets')
+            .select('vehicle_model, license_plate, categoria, verification_status')
+            .eq('instructor_id', instructorId)
+            .maybeSingle()
+
+        if (assetsError) throw assetsError
+
+        return {
+            success: true,
+            data: {
+                profile,
+                assets
+            }
+        }
+    } catch (error: any) {
+        return { error: error.message || 'Erro ao carregar perfil do instrutor' }
+    }
+}
+
 export async function updateAccountSettings(data: {
     // Placeholder for account-specific settings like notifications or password
     // Password change usually happens via supabase.auth.updateUser

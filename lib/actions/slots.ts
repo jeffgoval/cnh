@@ -48,6 +48,7 @@ export async function createSlot(data: {
         end_time: data.end_time,
         price: data.price,
         location_address: data.location_address,
+        is_booked: false, // Garantir que o slot é criado como disponível
       })
       .select()
       .single()
@@ -112,19 +113,30 @@ export async function getAvailableSlots(instructorId: string) {
   const supabase = await createClient()
 
   try {
+    const now = new Date()
+    const nowISO = now.toISOString()
+
+    // Buscar slots disponíveis usando a política RLS do Supabase
+    // A política já filtra por is_booked = false e document_verified = true
     const { data: slots, error } = await supabase
       .from('slots')
       .select('*')
       .eq('instructor_id', instructorId)
       .eq('is_booked', false)
-      .gte('start_time', new Date().toISOString())
+      .gte('end_time', nowISO) // Apenas slots que ainda não terminaram
       .order('start_time', { ascending: true })
 
-    if (error) throw error
+    if (error) {
+      console.error('Erro ao buscar slots disponíveis:', error)
+      throw error
+    }
 
-    return { slots }
+    return { slots: slots || [] }
   } catch (error: any) {
+    console.error('Erro em getAvailableSlots:', error)
     return { error: error.message || 'Erro ao buscar slots' }
   }
 }
+
+
 

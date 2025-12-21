@@ -43,9 +43,9 @@ export default function LoginPage() {
       if (profile?.role === 'ADMIN') {
         router.push('/admin/instrutores')
       } else if (profile?.role === 'INSTRUTOR') {
-        router.push('/instrutor/agenda')
+        router.push('/instrutor/hoje')
       } else {
-        router.push('/aluno/buscar')
+        router.push('/aluno/minhas-aulas')
       }
     } catch (error: any) {
       toast.error(error.message || 'Erro ao fazer login')
@@ -104,4 +104,6 @@ export default function LoginPage() {
     </div>
   )
 }
+
+
 

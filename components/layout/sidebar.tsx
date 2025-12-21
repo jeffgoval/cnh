@@ -35,9 +35,9 @@ const sidebarLinks = {
   ],
   INSTRUTOR: [
     {
-      title: "Perfil",
-      href: "/instrutor/perfil",
-      icon: User,
+      title: "Hoje",
+      href: "/instrutor/hoje",
+      icon: Home,
     },
     {
       title: "Agenda",
@@ -45,13 +45,18 @@ const sidebarLinks = {
       icon: Calendar,
     },
     {
-      title: "Aulas Agendadas",
-      href: "/instrutor/aulas",
-      icon: GraduationCap,
+      title: "Perfil",
+      href: "/instrutor/perfil",
+      icon: User,
     },
     {
-      title: "Configurações",
-      href: "/configuracoes",
+      title: "Destaque",
+      href: "/instrutor/destaque",
+      icon: Shield,
+    },
+    {
+      title: "Ajuda",
+      href: "/instrutor/ajuda",
       icon: Settings,
     },
   ],
@@ -76,7 +81,7 @@ export function Sidebar({ userRole }: SidebarProps) {
   return (
     <div className="flex h-full flex-col border-r bg-card">
       <div className="flex h-14 items-center border-b px-6">
-        <Link href="/" className="flex items-center gap-2 text-[16px] font-medium">
+        <Link href="/" className="flex items-center gap-2 text-[16px] font-medium cursor-pointer">
           <GraduationCap className="h-5 w-5 text-primary" />
           <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
             AgendaCNH
@@ -94,7 +99,7 @@ export function Sidebar({ userRole }: SidebarProps) {
               key={link.href}
               href={link.href}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2.5 text-[13px] font-medium transition-all hover:bg-accent hover:text-accent-foreground",
+                "flex items-center gap-3 rounded-lg px-3 py-2.5 text-[13px] font-medium transition-all hover:bg-accent hover:text-accent-foreground cursor-pointer",
                 isActive
                   ? "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 hover:text-primary-foreground"
                   : "text-muted-foreground"

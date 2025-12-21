@@ -46,7 +46,7 @@ export function Navbar({ userName, userEmail, userRole }: NavbarProps) {
 
       <div className="flex items-center gap-4">
         <DropdownMenu>
-          <DropdownMenuTrigger className="flex items-center gap-3 rounded-full hover:bg-accent px-3 py-2 transition-colors">
+          <DropdownMenuTrigger className="flex items-center gap-3 rounded-full hover:bg-accent px-3 py-2 transition-colors cursor-pointer">
             <Avatar className="h-8 w-8">
               <AvatarImage src="" alt={userName} />
               <AvatarFallback className="bg-primary text-primary-foreground text-xs">

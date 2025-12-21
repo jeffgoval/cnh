@@ -480,3 +480,5 @@ export default function InstructorProfilePage() {
     </DashboardLayout>
   )
 }
+
+

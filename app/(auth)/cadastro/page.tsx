@@ -59,9 +59,9 @@ export default function CadastroPage() {
       if (role === 'ADMIN') {
         router.push('/admin/instrutores')
       } else if (role === 'INSTRUTOR') {
-        router.push('/instrutor/perfil')
+        router.push('/instrutor/hoje')
       } else {
-        router.push('/aluno/buscar')
+        router.push('/aluno/minhas-aulas')
       }
     } catch (error: any) {
       toast.error(error.message || 'Erro ao criar conta')
@@ -186,4 +186,6 @@ export default function CadastroPage() {
     </div>
   )
 }
+
+
 
