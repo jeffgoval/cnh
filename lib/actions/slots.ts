@@ -3,11 +3,44 @@
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 
+export async function getAvailableSlots(instructorId: string) {
+  const supabase = await createClient()
+
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) {
+    return { error: 'Não autenticado' }
+  }
+
+  if (!instructorId || typeof instructorId !== 'string') {
+    return { error: 'ID de instrutor inválido' }
+  }
+
+  try {
+    const now = new Date()
+
+    const { data: slots, error } = await supabase
+      .from('slots')
+      .select('*')
+      .eq('instructor_id', instructorId)
+      .eq('is_booked', false)
+      .gte('start_time', now.toISOString())
+      .order('start_time', { ascending: true })
+      .limit(20)
+
+    if (error) throw error
+
+    return { slots: slots || [] }
+  } catch (error: any) {
+    return { error: error.message || 'Erro ao buscar horários disponíveis' }
+  }
+}
+
 export async function createSlot(data: {
   start_time: string
   end_time: string
   price: number
   location_address: string
+  categoria: 'A' | 'B' | 'AB' | 'ACC'
 }) {
   const supabase = await createClient()
 
@@ -16,72 +49,32 @@ export async function createSlot(data: {
     return { error: 'Não autenticado' }
   }
 
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single()
+
+  if (profile?.role !== 'INSTRUTOR') {
+    return { error: 'Acesso negado. Apenas instrutores podem criar horários.' }
+  }
+
   try {
-    // Verificar se o usuário é instrutor
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', user.id)
-      .single()
-
-    if (profile?.role !== 'INSTRUTOR') {
-      return { error: 'Apenas instrutores podem criar slots' }
-    }
-
-    // Verificar conflitos de horário
-    const { data: existingSlots } = await supabase
-      .from('slots')
-      .select('*')
-      .eq('instructor_id', user.id)
-      .or(`start_time.lte.${data.end_time},end_time.gte.${data.start_time}`)
-
-    if (existingSlots && existingSlots.length > 0) {
-      return { error: 'Já existe um horário neste período' }
-    }
-
-    // Criar slot
-    const { data: slot, error } = await supabase
+    const { error } = await supabase
       .from('slots')
       .insert({
+        ...data,
         instructor_id: user.id,
-        start_time: data.start_time,
-        end_time: data.end_time,
-        price: data.price,
-        location_address: data.location_address,
-        is_booked: false, // Garantir que o slot é criado como disponível
+        is_booked: false
       })
-      .select()
-      .single()
 
     if (error) throw error
 
     revalidatePath('/instrutor/agenda')
-    return { slot }
+
+    return { success: true }
   } catch (error: any) {
-    return { error: error.message || 'Erro ao criar slot' }
-  }
-}
-
-export async function getInstructorSlots() {
-  const supabase = await createClient()
-
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) {
-    return { error: 'Não autenticado' }
-  }
-
-  try {
-    const { data: slots, error } = await supabase
-      .from('slots')
-      .select('*')
-      .eq('instructor_id', user.id)
-      .order('start_time', { ascending: true })
-
-    if (error) throw error
-
-    return { slots }
-  } catch (error: any) {
-    return { error: error.message || 'Erro ao buscar slots' }
+    return { error: error.message || 'Erro ao criar horário' }
   }
 }
 
@@ -93,50 +86,24 @@ export async function deleteSlot(slotId: string) {
     return { error: 'Não autenticado' }
   }
 
+  if (!slotId || typeof slotId !== 'string') {
+    return { error: 'ID de horário inválido' }
+  }
+
   try {
     const { error } = await supabase
       .from('slots')
       .delete()
       .eq('id', slotId)
       .eq('instructor_id', user.id)
+      .eq('is_booked', false)
 
     if (error) throw error
 
     revalidatePath('/instrutor/agenda')
+
     return { success: true }
   } catch (error: any) {
-    return { error: error.message || 'Erro ao deletar slot' }
+    return { error: error.message || 'Erro ao deletar horário' }
   }
 }
-
-export async function getAvailableSlots(instructorId: string) {
-  const supabase = await createClient()
-
-  try {
-    const now = new Date()
-    const nowISO = now.toISOString()
-
-    // Buscar slots disponíveis usando a política RLS do Supabase
-    // A política já filtra por is_booked = false e document_verified = true
-    const { data: slots, error } = await supabase
-      .from('slots')
-      .select('*')
-      .eq('instructor_id', instructorId)
-      .eq('is_booked', false)
-      .gte('end_time', nowISO) // Apenas slots que ainda não terminaram
-      .order('start_time', { ascending: true })
-
-    if (error) {
-      console.error('Erro ao buscar slots disponíveis:', error)
-      throw error
-    }
-
-    return { slots: slots || [] }
-  } catch (error: any) {
-    console.error('Erro em getAvailableSlots:', error)
-    return { error: error.message || 'Erro ao buscar slots' }
-  }
-}
-
-
-

@@ -61,7 +61,7 @@ export default function SettingsPage() {
             userName={user.full_name || undefined}
             userEmail={user.email}
         >
-            <div className="space-y-6 max-w-2xl mx-auto">
+            <div className="space-y-6">
                 <div>
                     <h1 className="text-2xl font-medium tracking-tight">Configurações</h1>
                     <p className="text-muted-foreground mt-2">

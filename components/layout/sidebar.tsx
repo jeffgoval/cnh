@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { Calendar, GraduationCap, Search, User, ClipboardList, Home, Settings, Shield } from "lucide-react"
+import { GraduationCap, Search, User, ClipboardList, Settings, Shield } from "lucide-react"
 import { Text } from "@/components/ui/typography"
 
 interface SidebarProps {
@@ -35,14 +35,9 @@ const sidebarLinks = {
   ],
   INSTRUTOR: [
     {
-      title: "Hoje",
-      href: "/instrutor/hoje",
-      icon: Home,
-    },
-    {
-      title: "Agenda",
-      href: "/instrutor/agenda",
-      icon: Calendar,
+      title: "Aulas",
+      href: "/instrutor/aulas",
+      icon: ClipboardList,
     },
     {
       title: "Perfil",

@@ -20,12 +20,9 @@ export function ProfileAvatar({ url, name, onUploadSuccess }: ProfileAvatarProps
         if (!file) return
 
         setUploading(true)
-        const formData = new FormData()
-        formData.append('file', file)
-        formData.append('type', 'avatar')
 
         try {
-            const result = await uploadDocument(formData)
+            const result = await uploadDocument(file, 'avatar')
             if (result.error) throw new Error(result.error)
             if (result.url) {
                 onUploadSuccess(result.url)

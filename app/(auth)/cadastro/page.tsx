@@ -2,146 +2,103 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Heading, Text } from '@/components/ui/typography'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { toast } from 'sonner'
-import type { UserRole } from '@/lib/supabase/types'
+import Link from 'next/link'
+import { UserRole } from '@/lib/supabase/types'
 
 export default function CadastroPage() {
-  const [role, setRole] = useState<UserRole | null>(null)
+  const router = useRouter()
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [role, setRole] = useState<UserRole>('ALUNO')
   const [loading, setLoading] = useState(false)
-  const router = useRouter()
-  const supabase = createClient()
 
-  const handleSignUp = async (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
-
-    if (!role) {
-      toast.error('Selecione seu tipo de cadastro')
-      return
-    }
-
     setLoading(true)
 
     try {
-      // 1. Criar usuário no Supabase Auth
+      const supabase = createClient()
+
+      // Create auth user
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            full_name: fullName,
+          },
+        },
       })
 
-      if (authError) throw authError
-      if (!authData.user) throw new Error('Erro ao criar usuário')
+      if (authError) {
+        toast.error(authError.message)
+        return
+      }
 
-      // 2. Criar perfil na tabela profiles
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .insert({
-          id: authData.user.id,
-          role,
-          full_name: fullName,
-          email,
-        })
+      if (authData.user) {
+        // Create profile
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .insert({
+            id: authData.user.id,
+            email: authData.user.email,
+            full_name: fullName,
+            role: role,
+          })
 
-      if (profileError) throw profileError
+        if (profileError) {
+          toast.error('Erro ao criar perfil')
+          return
+        }
 
-      toast.success('Cadastro realizado com sucesso!')
+        toast.success('Cadastro realizado com sucesso!')
 
-      // Redirecionar baseado no role
-      if (role === 'ADMIN') {
-        router.push('/admin/instrutores')
-      } else if (role === 'INSTRUTOR') {
-        router.push('/instrutor/hoje')
-      } else {
-        router.push('/aluno/minhas-aulas')
+        // Redirect based on role
+        if (role === 'INSTRUTOR') {
+          router.push('/instrutor/aulas')
+        } else {
+          router.push('/aluno/buscar')
+        }
       }
     } catch (error: any) {
-      toast.error(error.message || 'Erro ao criar conta')
+      toast.error('Erro ao fazer cadastro')
     } finally {
       setLoading(false)
     }
   }
 
-  if (!role) {
-    return (
-      <div className="flex min-h-screen items-center justify-center p-4">
-        <Card className="w-full max-w-2xl">
-          <CardHeader className="space-y-1">
-            <Heading level={2}>Cadastro</Heading>
-            <Text variant="muted">
-              Escolha como você deseja se cadastrar
-            </Text>
-          </CardHeader>
-          <CardContent className="grid gap-4 sm:grid-cols-2">
-            <Button
-              variant="outline"
-              className="h-32 flex-col space-y-2"
-              onClick={() => setRole('ALUNO')}
-            >
-              <div className="text-4xl">🎓</div>
-              <div className="font-medium">Sou Aluno</div>
-              <div className="text-xs text-muted-foreground">
-                Quero encontrar instrutores
-              </div>
-            </Button>
-            <Button
-              variant="outline"
-              className="h-32 flex-col space-y-2"
-              onClick={() => setRole('INSTRUTOR')}
-            >
-              <div className="text-4xl">🚗</div>
-              <div className="font-medium">Sou Instrutor</div>
-              <div className="text-xs text-muted-foreground">
-                Quero oferecer aulas
-              </div>
-            </Button>
-          </CardContent>
-          <CardFooter className="flex justify-center">
-            <Text variant="muted" className="text-center">
-              Já tem uma conta?{' '}
-              <Link href="/login" className="text-primary hover:underline">
-                Faça login
-              </Link>
-            </Text>
-          </CardFooter>
-        </Card>
-      </div>
-    )
-  }
-
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
       <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <Heading level={2}>
-            Cadastro - {role === 'ALUNO' ? 'Aluno' : 'Instrutor'}
-          </Heading>
-          <Text variant="muted">
-            Preencha seus dados para criar sua conta
-          </Text>
+        <CardHeader className="space-y-1 text-center">
+          <CardTitle className="text-2xl font-bold">Criar Conta</CardTitle>
+          <CardDescription>
+            Preencha seus dados para se cadastrar
+          </CardDescription>
         </CardHeader>
-        <form onSubmit={handleSignUp}>
-          <CardContent className="space-y-4">
+        <CardContent>
+          <form onSubmit={handleSignup} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="fullName">Nome completo</Label>
+              <Label htmlFor="fullName">Nome Completo</Label>
               <Input
                 id="fullName"
-                placeholder="João da Silva"
+                type="text"
+                placeholder="Seu nome completo"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 required
+                disabled={loading}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">E-mail</Label>
               <Input
                 id="email"
                 type="email"
@@ -149,6 +106,7 @@ export default function CadastroPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                disabled={loading}
               />
             </div>
             <div className="space-y-2">
@@ -161,31 +119,34 @@ export default function CadastroPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}
+                disabled={loading}
               />
-              <Text variant="muted" as="span" className="text-[11px]">
-                Mínimo 6 caracteres
-              </Text>
             </div>
-          </CardContent>
-          <CardFooter className="flex flex-col space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="role">Tipo de Usuário</Label>
+              <select
+                id="role"
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                value={role}
+                onChange={(e) => setRole(e.target.value as UserRole)}
+                disabled={loading}
+              >
+                <option value="ALUNO">Aluno</option>
+                <option value="INSTRUTOR">Instrutor</option>
+              </select>
+            </div>
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Criando conta...' : 'Criar conta'}
+              {loading ? 'Cadastrando...' : 'Cadastrar'}
             </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              className="w-full"
-              onClick={() => setRole(null)}
-              disabled={loading}
-            >
-              Voltar
-            </Button>
-          </CardFooter>
-        </form>
+          </form>
+          <div className="mt-4 text-center text-sm">
+            Já tem uma conta?{' '}
+            <Link href="/login" className="text-primary hover:underline">
+              Faça login
+            </Link>
+          </div>
+        </CardContent>
       </Card>
     </div>
   )
 }
-
-
-

@@ -10,14 +10,38 @@ import { useUser } from '@/hooks/use-user'
 import { Sparkles, Check, Crown, TrendingUp, MapPin } from 'lucide-react'
 
 export default function DestaquePage() {
-    const { user } = useUser()
+    const { user, loading } = useUser()
     const [isPremium, setIsPremium] = useState(false) // TODO: Get from database
+
+    // Security: Verify user is an INSTRUCTOR
+    if (loading) {
+        return (
+            <DashboardLayout userRole="INSTRUTOR">
+                <div className="flex h-96 items-center justify-center">
+                    <div className="text-center">
+                        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent" />
+                    </div>
+                </div>
+            </DashboardLayout>
+        )
+    }
+
+    if (!user || user.role !== 'INSTRUTOR') {
+        return (
+            <DashboardLayout userRole={user?.role}>
+                <div className="flex h-screen flex-col items-center justify-center gap-4">
+                    <h1 className="text-2xl font-medium text-destructive">Acesso Negado</h1>
+                    <p className="text-muted-foreground">Apenas instrutores podem acessar esta página</p>
+                </div>
+            </DashboardLayout>
+        )
+    }
 
     return (
         <DashboardLayout
-            userRole={user?.role || "INSTRUTOR"}
-            userName={user?.full_name || undefined}
-            userEmail={user?.email}
+            userRole={user.role}
+            userName={user.full_name || undefined}
+            userEmail={user.email}
         >
             <div className="space-y-6 max-w-2xl mx-auto">
                 {/* Header */}

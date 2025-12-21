@@ -7,6 +7,22 @@ import { VerificationStatus } from '@/lib/supabase/types'
 export async function getPendingInstructors() {
     const supabase = await createClient()
 
+    // Verify user is authenticated and is ADMIN
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    if (authError || !user) {
+        return { error: 'Não autenticado' }
+    }
+
+    const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single()
+
+    if (profile?.role !== 'ADMIN') {
+        return { error: 'Acesso negado. Apenas administradores podem visualizar instrutores pendentes.' }
+    }
+
     try {
         const { data: instructors, error } = await supabase
             .from('profiles')
@@ -32,6 +48,38 @@ export async function getPendingInstructors() {
 
 export async function approveInstructorAsset(instructorId: string, status: VerificationStatus) {
     const supabase = await createClient()
+
+    // Verify user is authenticated and is ADMIN
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    if (authError || !user) {
+        return { error: 'Não autenticado' }
+    }
+
+    const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single()
+
+    if (profile?.role !== 'ADMIN') {
+        return { error: 'Acesso negado. Apenas administradores podem aprovar/rejeitar instrutores.' }
+    }
+
+    // Validate instructorId exists and belongs to an instructor
+    if (!instructorId || typeof instructorId !== 'string') {
+        return { error: 'ID de instrutor inválido' }
+    }
+
+    const { data: instructor } = await supabase
+        .from('profiles')
+        .select('id, role')
+        .eq('id', instructorId)
+        .eq('role', 'INSTRUTOR')
+        .single()
+
+    if (!instructor) {
+        return { error: 'Instrutor não encontrado' }
+    }
 
     try {
         // 1. Update instructor_assets status

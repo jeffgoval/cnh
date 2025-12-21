@@ -20,10 +20,26 @@ export async function updateProfile(data: {
     }
 
     try {
+        // Whitelist of allowed fields - prevent role/sensitive field manipulation
+        const allowedFields = {
+            full_name: data.full_name,
+            phone: data.phone,
+            bio: data.bio,
+            avatar_url: data.avatar_url,
+            cpf: data.cpf,
+            renach_instrutor: data.renach_instrutor,
+            // document_verified is removed - only admin can set this
+        }
+
+        // Remove undefined values
+        const updateData = Object.fromEntries(
+            Object.entries(allowedFields).filter(([_, v]) => v !== undefined)
+        )
+
         const { error } = await supabase
             .from('profiles')
             .update({
-                ...data,
+                ...updateData,
                 updated_at: new Date().toISOString(),
             })
             .eq('id', user.id)
@@ -48,12 +64,37 @@ export async function updateInstructorData(profileData: any, assetData: any) {
         return { error: 'Não autenticado' }
     }
 
+    // Verify user is an INSTRUCTOR
+    const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single()
+
+    if (profile?.role !== 'INSTRUTOR') {
+        return { error: 'Acesso negado. Apenas instrutores podem atualizar dados de instrutor.' }
+    }
+
     try {
-        // 1. Update Profile
+        // 1. Update Profile - whitelist allowed fields
+        const allowedProfileFields = {
+            full_name: profileData?.full_name,
+            phone: profileData?.phone,
+            bio: profileData?.bio,
+            avatar_url: profileData?.avatar_url,
+            cpf: profileData?.cpf,
+            renach_instrutor: profileData?.renach_instrutor,
+            // role, document_verified are NOT allowed
+        }
+
+        const updateProfileData = Object.fromEntries(
+            Object.entries(allowedProfileFields).filter(([_, v]) => v !== undefined)
+        )
+
         const { error: profileError } = await supabase
             .from('profiles')
             .update({
-                ...profileData,
+                ...updateProfileData,
                 updated_at: new Date().toISOString(),
             })
             .eq('id', user.id)

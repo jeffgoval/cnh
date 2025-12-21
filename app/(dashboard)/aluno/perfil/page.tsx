@@ -61,12 +61,9 @@ export default function StudentProfilePage() {
         if (!file) return
 
         setUploading(true)
-        const uploadData = new FormData()
-        uploadData.append('file', file)
-        uploadData.append('type', 'avatar')
 
         try {
-            const result = await uploadDocument(uploadData)
+            const result = await uploadDocument(file, 'avatar')
             if (result.error) {
                 toast.error(result.error)
             } else if (result.url) {
@@ -112,7 +109,7 @@ export default function StudentProfilePage() {
             userName={formData.full_name || undefined}
             userEmail={user.email}
         >
-            <div className="space-y-6 max-w-2xl mx-auto">
+            <div className="space-y-6">
                 <div>
                     <h1 className="text-2xl font-medium tracking-tight">Meu Perfil</h1>
                     <p className="text-muted-foreground mt-2">

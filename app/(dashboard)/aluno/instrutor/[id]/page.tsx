@@ -183,11 +183,23 @@ export default function InstructorProfileViewPage() {
     return <LoadingState message="Carregando perfil do instrutor..." />
   }
 
+  // Security: Verify user is authenticated and is a STUDENT
   if (!user) {
     return (
       <div className="flex h-screen items-center justify-center">
         <Text>Faça login para continuar</Text>
       </div>
+    )
+  }
+
+  if (user.role !== 'ALUNO') {
+    return (
+      <DashboardLayout userRole={user.role}>
+        <div className="flex h-screen flex-col items-center justify-center gap-4">
+          <h1 className="text-2xl font-medium text-destructive">Acesso Negado</h1>
+          <p className="text-muted-foreground">Apenas alunos podem visualizar perfis de instrutores</p>
+        </div>
+      </DashboardLayout>
     )
   }
 
@@ -237,7 +249,7 @@ export default function InstructorProfileViewPage() {
       userName={user.full_name || undefined}
       userEmail={user.email}
     >
-      <div className="max-w-2xl mx-auto space-y-6">
+      <div className="max-w-3xl mx-auto space-y-6">
         {/* Back Button */}
         <Button
           variant="ghost"
